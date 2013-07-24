@@ -71,6 +71,7 @@
  * VERSION HISTORY
  *
  * 1.1.3 2014/11/03; now handle exit status correctly (thanks to Richard Faasen)
+ * 1.1.2 2013/08/02; return execvp's value if running child process fails (Allard Hoeve)
  * 1.1.2 2013/04/26; now we use lockf() if the platform supports it
  * 1.1.1 2012/09/05; added setsid() to make the controlled process a process
  *			group leader
@@ -304,7 +305,8 @@ int main(int argc, char **argv)
 		 */
 		(void) setsid();
 
-		execvp(argv[0], argv);
+		/* Set rc to the result of execvp. This lets the parent know we failed. */
+		rc = execvp(argv[0], argv);
 	}
 	else if ( childpid > 0 )
 	{
