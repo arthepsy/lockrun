@@ -209,6 +209,14 @@ supported by this or the command which follows — it's handled by the
   > error, but adding the `--wait` parameter causes it to loop, waiting
   > for the prior lock to be released.
   
+  **`--sleep=N`**
+  > When using `--wait`, will sleep <N> seconds between attempts to 
+  > acquire the lock.
+
+  **`--retries=N`**
+  > When using `--wait`, will try only <N> attempts of acquiring the
+  > lock.
+
   **`--verbose`**
   > Show a bit more runtime debugging.
   
@@ -221,6 +229,7 @@ supported by this or the command which follows — it's handled by the
   > Mark the end of the options - the actual command to run follows.
 
 # History
+* 2015/11/23 — release 1.2.0
 * 2014/11/03 — now handle exit status correctly (thanks to Richard Faasen)
 * 2013/08/02 — return execvp's value if running child process fails (Allard Hoeve)
 * 2013/04/26 — now we use lockf() if the platform supports it (Steve Friedl)
