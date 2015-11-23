@@ -199,7 +199,7 @@ supported by this or the command which follows — it's handled by the
   > done. This file is never removed.
 
   **`--maxtime=N`**
-  > The script being controlled ought to run for no more than <N>
+  > The script being controlled ought to run for no more than \<N\>
   > seconds, and if it's beyond that time, we should report it to the
   > standard error stream (which probably gets routed to the user via
   > cron's email).
@@ -210,11 +210,11 @@ supported by this or the command which follows — it's handled by the
   > for the prior lock to be released.
   
   **`--sleep=N`**
-  > When using `--wait`, will sleep <N> seconds between attempts to 
+  > When using `--wait`, will sleep \<N\> seconds between attempts to 
   > acquire the lock.
 
   **`--retries=N`**
-  > When using `--wait`, will try only <N> attempts of acquiring the
+  > When using `--wait`, will try only \<N\> attempts of acquiring the
   > lock.
 
   **`--verbose`**
