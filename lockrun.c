@@ -1,84 +1,28 @@
 /*
- * $Id: //websites/unixwiz/unixwiz.net/webroot/tools/lockrun.c#8 $
- *
- * written by :	Stephen J. Friedl
- *              Software Consultant
- *		Southern California USA
- *              steve@unixwiz.net
- *		http://www.unixwiz.net/tools/
- *
- *	===================================================================
- *	======== This software is in the public domain, and can be ========
- *	======== used by anybody for any purpose                   ========
- *	===================================================================
- *
- *	Lockrun: This program is used to launch a program out with a lockout
- *	so that only one can run at a time. It's mainly intended for use out
- *	of cron so that our five-minute running jobs which run long don't get
- *	walked on. We find this a *lot* with Cacti jobs which just get hung
- *	up: it's better to miss a polling period than to stack them up and
- *	slow each other down.
- *
- *	So we use a file which is used for locking: this program attempts to
- *	lock the file, and if the lock exists, we have to either exit with
- *	an error, or wait for it to release.
- *
- *		lockrun --lockfile=FILE -- my command here
- *
- * COMMAND LINE
- * ------------
- *
- * --lockfile=F
- *
- *	Specify the name of a file which is used for locking. The file is
- *	created if necessary (with mode 0666), and no I/O of any kind is
- *	done. The file is never removed.
- *
- * --maxtime=N
- *
- *	The script being controlled should run for no more than <N> seconds,
- *	and if it's beyond that time, we should report it to the standard
- *	error (which probably gets routed to the user via cron's email).
- *
- * --wait
- *
- *	When a lock is hit, we normally exit with error, but --wait causes
- *	it to loop until the lock is released.
- *
- * --sleep=N
+ * This is free and unencumbered software released into the public domain.
  * 
- *	When using --wait, will sleep <N> seconds between attempts to acquire
- *	the lock.
- *
- * --retries=N
- *
- *	When using --wait, will try only <N> attempts of acquiring the lock.
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
  * 
- * --verbose
- *
- *	Show a bit more runtime debugging.
- *
- * --quiet
- *
- *	Don't show "run is locked" error if things are busy; keeps cron from
- *	overwhelming you with messages if lockrun overlap is not uncommon.
- *
- * --
- *
- *	Mark the end of the options: the command to run follows.
- *	
- *
- * VERSION HISTORY
- *
- * 1.1.3 2014/11/03; now handle exit status correctly (thanks to Richard Faasen)
- * 1.1.2 2013/08/02; return execvp's value if running child process fails (Allard Hoeve)
- * 1.1.2 2013/04/26; now we use lockf() if the platform supports it
- * 1.1.1 2012/09/05; added setsid() to make the controlled process a process
- *			group leader
- * 1.1.0 2012/09/05; added --version and --help; added --retries (thanks Dov Murik)
- * 1.0.3 2010/11/20; added --quiet parameter
- * 1.0.2 2009/06/25; added lockf() support for Solaris 10 (thanks Michal Bella)
- * 1.0.1 2006/06/03; initial release	
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * 
+ * For more information, please refer to <http://unlicense.org>
  * 
  */
 
@@ -94,7 +38,7 @@
 #include <sys/wait.h>
 #include <sys/file.h>
 
-static const char Version[] = "lockrun 1.1.3 - 2014-11-03 - steve@unixwiz.net";
+static const char Version[] = "lockrun 1.2.0";
 
 #ifndef __GNUC__
 # define __attribute__(x)	/* nothing */
@@ -165,7 +109,11 @@ int main(int argc, char **argv)
 	time_t	starttime;
 	int	attempts = 0;
 
-	UNUSED_PARAMETER(argc);
+	if ( ! (argc > 1) )
+	{
+		show_help(helptext);
+		exit(EXIT_SUCCESS);
+	}
 
 	time(&starttime);
 
