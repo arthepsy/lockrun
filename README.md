@@ -1,5 +1,5 @@
 # lockrun
-> origin: this is [lockrun](http://www.unixwiz.net/tools/lockrun.html) by Steve Friedl, plus some patches.
+> origin: this is [lockrun](http://www.unixwiz.net/tools/lockrun.html) by Steve Friedl, plus some patches. see [ChangeLog](#changelog) below.
 
 When doing network monitoring, it's common to run a cron job every five
 minutes (the standard interval) to roam around the network gathering
@@ -228,7 +228,7 @@ supported by this or the command which follows — it's handled by the
   **`--`**
   > Mark the end of the options - the actual command to run follows.
 
-# History
+# ChangeLog
 * 2015/11/23 — release 1.2.0
 * 2014/11/03 — now handle exit status correctly (thanks to Richard Faasen)
 * 2013/08/02 — return execvp's value if running child process fails (Allard Hoeve)
