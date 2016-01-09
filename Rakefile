@@ -23,6 +23,14 @@ task :deb => [:fakeroot, :lockrun] do
     -C .fakeroot --license "Public Domain" usr }
 end
 
+task :rpm => [:fakeroot, :lockrun] do
+  sh %{ fpm -s dir -t rpm -n lockrun \
+    -v #{SEMVER} --iteration #{iteration} \
+    --url https://github.com/arthepsy/lockrun \
+    --description "Lockrun allows you to use a lock to prevent multiple simultaneous executions of an executable." \
+    -C .fakeroot --license "Public Domain" usr }
+end
+
 task :fakeroot => [:lockrun] do
   puts "iteration: #{iteration}"
   sh %{ rm -fr .fakeroot }
