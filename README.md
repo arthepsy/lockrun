@@ -229,6 +229,7 @@ supported by this or the command which follows — it's handled by the
   > Mark the end of the options - the actual command to run follows.
 
 # ChangeLog
+* 2016/01/10 — added deb/rpm packaging (Joe Block)
 * 2015/11/23 — release 1.2.0
 * 2014/11/03 — now handle exit status correctly (thanks to Richard Faasen)
 * 2013/08/02 — return execvp's value if running child process fails (Allard Hoeve)
